@@ -72,6 +72,17 @@ export default function Transitions() {
       try { sessionStorage.removeItem("chunk-reload"); } catch {}
     }, 5000);
 
+    // Older deploys told browsers to keep case-study pages for a week. Refresh those
+    // cached copies once per visit so a returning visitor never opens an outdated one.
+    try {
+      if (!sessionStorage.getItem("pages-refreshed")) {
+        sessionStorage.setItem("pages-refreshed", "1");
+        for (const p of ["/projects/gymflow/", "/projects/rep-theory/"]) {
+          if (p !== window.location.pathname) fetch(p, { cache: "reload" }).catch(() => {});
+        }
+      }
+    } catch {}
+
     document.addEventListener("click", onClick, true);
     window.addEventListener("pageswap", onPageSwap);
     window.addEventListener("pagereveal", onPageReveal);
