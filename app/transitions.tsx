@@ -94,11 +94,21 @@ export default function Transitions() {
     const fitLater = [setTimeout(fit, 60), setTimeout(fit, 500)];
     window.addEventListener("resize", fit);
 
+    // Case studies: Esc goes back to the projects list
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape" || e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t?.closest?.("input, textarea, select, [contenteditable]")) return;
+      document.querySelector<HTMLAnchorElement>("a.backbtn")?.click();
+    };
+    window.addEventListener("keydown", onKey);
+
     document.addEventListener("click", onClick, true);
     window.addEventListener("pageswap", onPageSwap);
     window.addEventListener("pagereveal", onPageReveal);
     window.addEventListener("pageshow", onPageShow);
     return () => {
+      window.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", fit);
       fitLater.forEach(clearTimeout);
       window.removeEventListener("error", onError);
