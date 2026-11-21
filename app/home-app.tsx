@@ -64,6 +64,7 @@ export default function HomeApp({ initial }: { initial: Theme }) {
       const prev = c.style.scrollSnapType;
       c.style.scrollSnapType = "none";
       if (returning && saved) {
+        c.classList.add("returned");
         c.scrollTop = saved.scroll;
         const card = document.querySelector<HTMLElement>('a.pcard[href="' + saved.card + '"]');
         if (card) {
@@ -74,7 +75,10 @@ export default function HomeApp({ initial }: { initial: Theme }) {
       } else {
         const id = decodeURIComponent(window.location.hash.slice(1));
         const el = id ? document.getElementById(id) : null;
-        if (el) c.scrollTop = el.offsetTop;
+        if (el) {
+          c.classList.add("returned");
+          c.scrollTop = el.offsetTop;
+        }
       }
       requestAnimationFrame(() => {
         c.style.scrollSnapType = prev;

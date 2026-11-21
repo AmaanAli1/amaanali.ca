@@ -44,3 +44,7 @@ a.pcard.just-returned { animation: just-returned 1.6s cubic-bezier(.2, .8, .2, 1
 .theme-vt::view-transition-new(root) { animation: theme-in 520ms cubic-bezier(.4, 0, .2, 1) both; mix-blend-mode: normal; }
 @keyframes theme-out { to { opacity: 0; } }
 @keyframes theme-in { from { opacity: 0; } }
+
+/* Coming back to a saved spot on the home page: show everything immediately instead of
+   relying on the scroll-linked fade-in, which some browsers don't update after a jump. */
+#home.returned .pg > * { animation: none !important; opacity: 1 !important; transform: none !important; }

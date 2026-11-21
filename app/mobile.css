@@ -136,6 +136,17 @@
     display: none !important;
   }
 
+  /* Keep phones simple and safe: no page-to-page morph, and no scroll-linked fade-in
+     (iOS Safari could leave sections invisible after jumping back to a saved position). */
+  @view-transition {
+    navigation: none;
+  }
+  .pg > * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
   main#home .pg {
     min-height: 0 !important;
     justify-content: flex-start !important;
