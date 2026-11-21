@@ -135,5 +135,55 @@ export default function HomeApp({ initial }: { initial: Theme }) {
   }, [mounted, theme]);
 
   if (!mounted) return <div style={{ height: "100vh", background: BG[initial] }} />;
-  return <div className="dc-enter">{theme === "dark" ? <DarkPage /> : <LightPage />}</div>;
+  return (
+    <>
+      <div className="dc-enter">{theme === "dark" ? <DarkPage /> : <LightPage />}</div>
+      <MobileMenuButton />
+    </>
+  );
+}
+
+/**
+ * Phones only (hidden by CSS on wider screens): the sidebar collapses into a top bar,
+ * and this button opens it as a full-screen menu. Picking anything in the menu closes it.
+ */
+function MobileMenuButton() {
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    document.body.classList.toggle("navopen", open);
+    return () => document.body.classList.remove("navopen");
+  }, [open]);
+
+  React.useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if ((e.target as HTMLElement | null)?.closest?.("aside a")) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    const mq = window.matchMedia("(min-width: 761px)");
+    const onWide = () => mq.matches && setOpen(false);
+    document.addEventListener("click", onClick);
+    window.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onWide);
+    return () => {
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onWide);
+    };
+  }, []);
+
+  return (
+    <button
+      type="button"
+      className="m-menu"
+      aria-label={open ? "Close menu" : "Open menu"}
+      aria-expanded={open}
+      onClick={() => setOpen((o) => !o)}
+    >
+      <span />
+      <span />
+    </button>
+  );
 }

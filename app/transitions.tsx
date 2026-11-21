@@ -83,11 +83,24 @@ export default function Transitions() {
       }
     } catch {}
 
+    // Phones: the case-study visuals are drawn at desktop width and scaled to fit the stage.
+    const fit = () => {
+      const stage = document.querySelector<HTMLElement>(".stage");
+      if (!stage || window.innerWidth > 760) return;
+      const z = Math.min(1, (stage.clientWidth - 24) / 740);
+      document.documentElement.style.setProperty("--vz", z.toFixed(3));
+    };
+    fit();
+    const fitLater = [setTimeout(fit, 60), setTimeout(fit, 500)];
+    window.addEventListener("resize", fit);
+
     document.addEventListener("click", onClick, true);
     window.addEventListener("pageswap", onPageSwap);
     window.addEventListener("pagereveal", onPageReveal);
     window.addEventListener("pageshow", onPageShow);
     return () => {
+      window.removeEventListener("resize", fit);
+      fitLater.forEach(clearTimeout);
       window.removeEventListener("error", onError);
       window.removeEventListener("unhandledrejection", onError);
       clearTimeout(clearGuard);

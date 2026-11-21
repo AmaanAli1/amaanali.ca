@@ -1,0 +1,418 @@
+/*
+ * Phone layout (760px and narrower).
+ *
+ * The pages are generated from the design canvas with inline styles, so these rules use
+ * !important to override them. Desktop and tablet are untouched: everything is inside
+ * the media query except the menu button, which is hidden by default.
+ */
+
+.m-menu {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* ───────────── Home: sidebar → top bar + full-screen menu ───────────── */
+
+  .dc-enter > div {
+    flex-direction: column !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+  }
+
+  aside.glassnav {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(242, 242, 242, 0.08) !important;
+    box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.6) !important;
+    z-index: 20 !important;
+  }
+  body.light aside.glassnav {
+    border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.18) !important;
+  }
+  aside.glassnav > div {
+    min-height: 0 !important;
+    padding: 10px 16px !important;
+    gap: 22px !important;
+  }
+  aside.glassnav > div > :not(.brand) {
+    display: none !important;
+  }
+  aside.glassnav .brand {
+    padding: 0 !important;
+    align-self: flex-start;
+  }
+  aside.glassnav .brand .mono-tile {
+    flex-basis: 38px !important;
+    height: 38px !important;
+    border-radius: 11px !important;
+  }
+
+  body.navopen aside.glassnav {
+    position: fixed !important;
+    inset: 0 !important;
+    overflow-y: auto !important;
+    z-index: 60 !important;
+    background: #141414 !important;
+    border-bottom: 0 !important;
+    animation: m-menu-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  body.light.navopen aside.glassnav {
+    background: #f7f7f8 !important;
+  }
+  body.navopen aside.glassnav > div {
+    min-height: 100% !important;
+    padding: 10px 20px 28px !important;
+  }
+  body.navopen aside.glassnav > div > * {
+    display: flex !important;
+  }
+  body.navopen aside.glassnav .item {
+    height: 52px !important;
+    font-size: 17px !important;
+  }
+
+  @keyframes m-menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+
+  .m-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    top: 10px;
+    right: 14px;
+    z-index: 70;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(242, 242, 242, 0.14);
+    background: rgba(30, 30, 30, 0.7);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .m-menu span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 1px;
+    background: #f2f2f2;
+    transition: transform 0.25s ease;
+  }
+  body.light .m-menu {
+    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.75);
+  }
+  body.light .m-menu span {
+    background: #1d1d1f;
+  }
+  body.navopen .m-menu span:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+  body.navopen .m-menu span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
+  /* Content column */
+  main#home {
+    flex: 1 1 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    scroll-snap-type: none !important;
+  }
+  /* Desktop-only chrome: top/bottom fades, next-section button, scroll rail */
+  .dc-enter > div > main ~ div {
+    display: none !important;
+  }
+
+  main#home .pg {
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    padding: 44px 16px 56px !important;
+    gap: 20px !important;
+  }
+  main#home .pg > div:first-child:has(> h2) {
+    flex-wrap: wrap;
+    row-gap: 4px !important;
+  }
+  main#home .pg h2 {
+    font-size: 30px !important;
+  }
+
+  /* ───────────── Hero terminal ───────────── */
+  main#home #top {
+    padding-top: 16px !important;
+  }
+  .termwin {
+    min-height: 0 !important;
+  }
+  .termwin > div:nth-child(2) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  /* intro first, code editor below it */
+  .termwin > div:nth-child(2) > div:first-child {
+    order: 2 !important;
+    border-left: 0 !important;
+    border-top: 1px solid rgba(242, 242, 242, 0.08);
+  }
+  .termwin > div:nth-child(2) > div:last-child {
+    order: 1 !important;
+    padding: 20px 18px !important;
+  }
+  .termwin > div:nth-child(2) > div:last-child > div:nth-child(2) > div:first-child {
+    font-size: 40px !important;
+  }
+  .termwin > div:nth-child(2) > div:first-child > div:nth-child(2) {
+    overflow-x: auto !important;
+    font-size: 11.5px !important;
+    padding: 14px 10px !important;
+  }
+  .termwin .logline {
+    white-space: normal !important;
+  }
+  /* status bar: keep the left half */
+  .termwin > div:last-child > div:last-child {
+    display: none !important;
+  }
+
+  /* ───────────── Experience ───────────── */
+  #experience > div:nth-child(2) {
+    padding: 18px !important;
+    gap: 20px !important;
+  }
+  #experience > div:nth-child(2) > div:first-child {
+    flex-wrap: wrap;
+    align-items: flex-start !important;
+    row-gap: 12px !important;
+  }
+  #experience > div:nth-child(2) > div:first-child > div:first-child {
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  #experience > div:nth-child(2) > div:first-child > div:first-child > span:first-child {
+    flex-basis: 44px !important;
+    height: 44px !important;
+  }
+  #experience > div:nth-child(2) > div:first-child > div:first-child > div > :first-child {
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+  }
+  /* stats: one row each, number on the left */
+  #experience > div:nth-child(2) > div:nth-child(2) {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  #experience .statc {
+    display: grid !important;
+    grid-template-columns: 92px minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 2px !important;
+    align-items: center;
+    padding: 14px 16px !important;
+  }
+  #experience .statc .statn {
+    grid-row: span 2;
+    font-size: 34px !important;
+  }
+  /* process: vertical list with the connectors running down */
+  #experience > div:nth-child(2) > div:nth-child(3) > div:first-child {
+    flex-wrap: wrap;
+    row-gap: 4px !important;
+  }
+  #experience > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  #experience .lift {
+    padding: 16px !important;
+  }
+  #experience .lift > :nth-child(3) {
+    min-height: 0 !important;
+  }
+  #experience > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > span {
+    flex: 0 0 2px !important;
+    transform: rotate(90deg);
+    margin: 10px 0 !important;
+  }
+  #experience > div:last-child {
+    padding: 14px 16px !important;
+  }
+
+  /* ───────────── Projects ───────────── */
+  main#home a.pcard,
+  #projects > div[style*="grid-template-columns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 16px !important;
+    gap: 18px !important;
+  }
+
+  /* ───────────── About ───────────── */
+  #about > div:nth-child(2) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 22px !important;
+  }
+  #about .abphoto {
+    height: 340px !important;
+  }
+  #about .abhi {
+    font-size: 26px !important;
+  }
+  #about > div:nth-child(2) > div:nth-child(2) > div[style*="grid-template-columns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+  }
+  /* "How I got here": swipe sideways through the timeline */
+  #about > div:nth-child(3) {
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 -16px !important;
+    padding: 0 16px 56px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  #about > div:nth-child(3)::-webkit-scrollbar {
+    display: none;
+  }
+  #about > div:nth-child(3) > * {
+    min-width: 820px;
+    margin-left: 44px !important;
+  }
+  #about > div:nth-child(3) > div:first-child {
+    position: sticky;
+    left: 0;
+    min-width: 0;
+    width: calc(100vw - 32px);
+    margin-left: 0 !important;
+  }
+  #about > div:nth-child(3) > div:first-child > span:last-child {
+    font-size: 0 !important;
+  }
+  #about > div:nth-child(3) > div:first-child > span:last-child::after {
+    content: "swipe \2192";
+    font-size: 11px;
+  }
+
+  #contact a.ul {
+    font-size: clamp(22px, 7.4vw, 32px) !important;
+    overflow-wrap: anywhere;
+  }
+
+  /* ───────────── Contact ───────────── */
+  #contact > div:nth-child(2) {
+    gap: 22px !important;
+  }
+  #contact h3 {
+    font-size: clamp(40px, 12vw, 52px) !important;
+    line-height: 1.02 !important;
+  }
+  #contact div[style*="grid-template-columns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  #contact > div:nth-child(2) > div:nth-child(3) {
+    flex-wrap: wrap;
+  }
+  #contact .noreveal {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+  main#home a.pcard:not([href^="http"]) {
+    min-height: 0 !important;
+  }
+
+  /* ───────────── Case studies: visual stage pinned on top, story scrolls below ───────────── */
+  div:has(> #rcol) {
+    flex-direction: column !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+  }
+  div:has(> #rcol) > div:first-child {
+    flex: 0 0 auto !important;
+    height: auto !important;
+    padding: 12px 12px 8px !important;
+    gap: 8px !important;
+  }
+  div:has(> #rcol) .stage {
+    flex: 0 0 auto !important;
+    height: 40svh !important;
+    min-height: 250px;
+    max-height: 380px;
+    border-radius: 18px !important;
+  }
+  div:has(> #rcol) .stage .wm {
+    font-size: 110px !important;
+  }
+  div:has(> #rcol) .vlayer {
+    padding: 14px 12px 34px !important;
+  }
+  /* each visual is drawn at desktop width, then scaled to fit (--vz is set in transitions.tsx) */
+  div:has(> #rcol) .vlayer > * {
+    width: 740px !important;
+    flex: none !important;
+    zoom: var(--vz, 0.47);
+  }
+  div:has(> #rcol) .capbar {
+    right: 10px !important;
+    bottom: 8px !important;
+  }
+  div:has(> #rcol) > div:first-child > div:first-child > * {
+    white-space: nowrap;
+    font-size: 11.5px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  div:has(> #rcol) > div:first-child > div:first-child {
+    gap: 12px;
+  }
+  div:has(> #rcol) .capchip {
+    white-space: nowrap;
+    height: 24px !important;
+    font-size: 10.5px !important;
+    padding: 0 9px !important;
+  }
+  div:has(> #rcol) .stage > div:last-child:not(.capbar) {
+    left: 14px !important;
+    bottom: 18px !important;
+  }
+  #rcol {
+    flex: 1 1 0 !important;
+    height: auto !important;
+    padding: 0 18px 48px !important;
+  }
+  /* the right-hand section rail */
+  div:has(> #rcol) > #rcol ~ div {
+    display: none !important;
+  }
+  #rcol > section {
+    min-height: 0 !important;
+    padding: 36px 0 !important;
+    justify-content: flex-start !important;
+  }
+  #rcol h1 {
+    font-size: 46px !important;
+  }
+  #rcol h2 {
+    font-size: 28px !important;
+  }
+  #rcol div[style*="repeat(4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  #rcol .cardin {
+    overflow-x: auto !important;
+  }
+  #rcol .cardin[style*="JetBrains"] {
+    font-size: 12px !important;
+  }
+}
