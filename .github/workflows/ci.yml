@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Check every page was exported
+        run: |
+          for p in index.html light/index.html projects/gymflow/index.html projects/rep-theory/index.html 404.html; do
+            test -f "out/$p" || { echo "missing out/$p"; exit 1; }
+          done
