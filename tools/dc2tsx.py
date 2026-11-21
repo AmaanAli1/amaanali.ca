@@ -21,6 +21,11 @@ EVT={'onclick':'onClick','onscroll':'onScroll','oninput':'onInput','onchange':'o
  'onmousemove':'onMouseMove','onmousedown':'onMouseDown','onmouseup':'onMouseUp','onkeydown':'onKeyDown','onkeyup':'onKeyUp','onfocus':'onFocus',
  'onblur':'onBlur','onsubmit':'onSubmit','onpointermove':'onPointerMove','onpointerleave':'onPointerLeave','onpointerenter':'onPointerEnter','onwheel':'onWheel'}
 BOOL={'autoplay','muted','loop','playsinline','controls','disabled','checked','hidden','required','readonly','multiple','selected','open','defer','async','novalidate'}
+# HTMLParser lowercases tag names; SVG needs these camelCased or the browser ignores them
+SVGTAGS={x.lower():x for x in ['linearGradient','radialGradient','animateMotion','animateTransform','clipPath','foreignObject','textPath',
+ 'feGaussianBlur','feOffset','feBlend','feColorMatrix','feComposite','feFlood','feMerge','feMergeNode','feDropShadow','feTurbulence',
+ 'feDisplacementMap','fePointLight','feSpecularLighting','feDiffuseLighting','feMorphology','feTile','feImage','feFuncA','feFuncR','feFuncG','feFuncB',
+ 'feComponentTransfer','feConvolveMatrix','feSpotLight','feDistantLight','glyphRef','altGlyph','altGlyphDef','altGlyphItem','glyph']}
 HOLE=re.compile(r'\{\{\s*([A-Za-z_$][\w$]*(?:\.[\w$]+)*)\s*\}\}')
 
 def camel_css(p):
@@ -104,12 +109,14 @@ class Conv(HTMLParser):
             self.out.append(f'{{({self.expr(m.group(1))} || []).map(({var}: any, {var}__i: number) => (<React.Fragment key={{{var}__i}}>')
             self.loops.append(var); self.stack.append('sc-for'); return
         a=self.attrs(tag,attrs)
+        tag=SVGTAGS.get(tag,tag)
         if tag in VOID: self.out.append(f'<{tag}{a} />'); return
         self.out.append(f'<{tag}{a}>'); self.stack.append(tag)
     def handle_startendtag(self,tag,attrs):
-        a=self.attrs(tag,attrs); self.out.append(f'<{tag}{a} />')
+        a=self.attrs(tag,attrs); self.out.append(f'<{SVGTAGS.get(tag,tag)}{a} />')
     def handle_endtag(self,tag):
         if tag in VOID: return
+        tag=SVGTAGS.get(tag,tag)
         t=self.stack.pop()
         if t=='sc-for': self.loops.pop(); self.out.append('</React.Fragment>))}'); return
         self.out.append(f'</{tag}>')
