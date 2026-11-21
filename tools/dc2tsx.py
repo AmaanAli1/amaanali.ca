@@ -76,6 +76,13 @@ class Conv(HTMLParser):
         return '{{' + ', '.join(items) + '}}'
     def attrs(self,tag,attrs):
         res=[]
+        # Links that leave the site (other domains, PDFs, videos) always open in a new tab
+        if tag=='a':
+            href=dict(attrs).get('href') or ''
+            for a,b in self.links.items(): href=href.replace(a,b)
+            leaves=href.startswith(('http://','https://')) or href.split('?')[0].lower().endswith(('.pdf','.mp4','.webm','.mov'))
+            if leaves:
+                attrs=[(n,v) for n,v in attrs if n not in ('target','rel')]+[('target','_blank'),('rel','noopener noreferrer')]
         for n,v in attrs:
             if n in ('hint-placeholder-count',): continue
             if n in EVT:
