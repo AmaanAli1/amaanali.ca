@@ -54,11 +54,32 @@ export default function Transitions() {
       clicked = null;
     };
 
+    // If an old copy of a page asks for build files from a previous deploy, reload once
+    // to get the current version instead of showing an error.
+    const onError = (e: ErrorEvent | PromiseRejectionEvent) => {
+      const err = "reason" in e ? e.reason : e.error;
+      const msg = String(err?.name || "") + " " + String(err?.message || ("message" in e ? e.message : ""));
+      if (!/ChunkLoadError|Failed to load chunk|Loading chunk/i.test(msg)) return;
+      try {
+        if (sessionStorage.getItem("chunk-reload") === window.location.pathname) return;
+        sessionStorage.setItem("chunk-reload", window.location.pathname);
+      } catch {}
+      window.location.reload();
+    };
+    window.addEventListener("error", onError);
+    window.addEventListener("unhandledrejection", onError);
+    const clearGuard = setTimeout(() => {
+      try { sessionStorage.removeItem("chunk-reload"); } catch {}
+    }, 5000);
+
     document.addEventListener("click", onClick, true);
     window.addEventListener("pageswap", onPageSwap);
     window.addEventListener("pagereveal", onPageReveal);
     window.addEventListener("pageshow", onPageShow);
     return () => {
+      window.removeEventListener("error", onError);
+      window.removeEventListener("unhandledrejection", onError);
+      clearTimeout(clearGuard);
       document.removeEventListener("click", onClick, true);
       window.removeEventListener("pageswap", onPageSwap);
       window.removeEventListener("pagereveal", onPageReveal);

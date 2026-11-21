@@ -1,9 +1,10 @@
-/projects/*
-  Cache-Control: public, max-age=604800
-/about/*
-  Cache-Control: public, max-age=604800
+# Hashed build files never change, so browsers can keep them forever.
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Everything else (HTML pages, images, the résumé) uses Cloudflare's default:
+# the browser revalidates each time, so a new deploy shows up immediately and
+# a page never points at build files that no longer exist.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
