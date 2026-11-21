@@ -143,5 +143,5 @@ export default function HomeLight() {
     }, 60);
     return () => clearTimeout(t);
   }, [mounted]);
-  return mounted ? <Logic /> : <div style={{ height: '100vh', background: '#F5F5F7' }} />;
+  return mounted ? <div className="dc-enter"><Logic /></div> : <div style={{ height: '100vh', background: '#F5F5F7' }} />;
 }

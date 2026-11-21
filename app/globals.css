@@ -2,3 +2,31 @@ html, body { margin: 0; padding: 0; height: 100%; }
 body { background: #101010; -webkit-font-smoothing: antialiased; }
 body.light { background: #F5F5F7; }
 *, *::before, *::after { box-sizing: border-box; }
+
+/* ---------- Page transitions (cross-document View Transitions) ----------
+   Supported in Chrome, Edge and Safari 18.2+. Other browsers navigate instantly. */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root) { animation: vt-out 280ms cubic-bezier(.4, 0, 1, 1) both; }
+::view-transition-new(root) { animation: vt-in 520ms cubic-bezier(.2, .8, .2, 1) 80ms both; }
+
+/* the clicked project screenshot morphs into the case study's stage */
+::view-transition-group(project-hero) { animation-duration: 620ms; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+::view-transition-old(project-hero),
+::view-transition-new(project-hero) { height: 100%; object-fit: cover; object-position: top left; }
+::view-transition-new(project-hero) { animation: vt-fade-in 420ms ease 180ms both; }
+::view-transition-old(project-hero) { animation: vt-fade-out 300ms ease both; }
+
+@keyframes vt-out { to { opacity: 0; transform: scale(.985); filter: blur(2px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+@keyframes vt-fade-out { to { opacity: 0; } }
+
+/* pages that render on the client (home, light) fade in once they mount */
+.dc-enter { animation: dc-enter 480ms cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes dc-enter { from { opacity: 0; transform: translateY(10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .dc-enter { animation: none; }
+}
