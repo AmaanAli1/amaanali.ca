@@ -1,0 +1,12 @@
+{
+  // Deploys the static export in ./out as a Cloudflare Worker with static assets.
+  // `npm run build` creates ./out; Cloudflare's deploy step (`npx wrangler deploy`) uploads it.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "amaanali-ca",
+  "compatibility_date": "2026-11-19",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
