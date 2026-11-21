@@ -52,11 +52,24 @@ class Logic extends React.Component<any, any> {
     if (cur !== this.state.active || Math.abs(prog - (this.state.prog || 0)) > 0.002) this.setState({ active: cur, prog });
   }
   goTo(id, e) {
-    if (e) e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     const c = document.getElementById('home'); if (!c) return;
     const el = id === 'home' ? null : document.getElementById(id);
     if (id !== 'home' && !el) return;
-    c.scrollTo({ top: el ? el.offsetTop : 0, behavior: 'smooth' });
+    const to = el ? el.offsetTop : 0, from = c.scrollTop, dist = to - from;
+    if (Math.abs(dist) < 2) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { c.scrollTop = to; return; }
+    // eased scroll: smooth over any distance, and scroll-snap paused so it can't tug mid-flight
+    cancelAnimationFrame(this.scrollRaf);
+    const dur = Math.min(1100, 450 + Math.abs(dist) * 0.12), t0 = performance.now();
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const snap = c.style.scrollSnapType; c.style.scrollSnapType = 'none';
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / dur);
+      c.scrollTop = from + dist * ease(t);
+      if (t < 1) this.scrollRaf = requestAnimationFrame(step); else c.style.scrollSnapType = snap;
+    };
+    this.scrollRaf = requestAnimationFrame(step);
   }
   componentWillUnmount() { clearInterval(this.ctSc); clearTimeout(this.ctCt); clearInterval(this.xcy); clearInterval(this.xiv); clearInterval(this.gt); clearInterval(this.sp); clearInterval(this.pg); }
   ctAddr() { const p = ['moc', 'oohay', '99ila', 'naama'].map(x => x.split('').reverse().join('')); return p[3] + '.' + p[2] + String.fromCharCode(64) + p[1] + '.' + p[0]; }
@@ -98,7 +111,7 @@ class Logic extends React.Component<any, any> {
       onMove: (e) => this.onMoveH(e), onLeave: () => this.setState({ hov: false }),
       glow: 'radial-gradient(420px circle at ' + mx + 'px ' + my + 'px, rgba(242,242,242,.07), rgba(242,242,242,0) 60%)',
       glowOn: this.state.hov ? 1 : 0,
-      goTop: () => this.goTo('home'), ringOff: (144.51 * (1 - (this.state.prog || 0))).toFixed(2), progPct: String(Math.round((this.state.prog || 0) * 100)).padStart(2, '0') + '%', progH: 'calc((100% - 40px) * ' + (this.state.prog || 0).toFixed(3) + ')',
+      goTop: (e) => this.goTo('home', e), ringOff: (144.51 * (1 - (this.state.prog || 0))).toFixed(2), progPct: String(Math.round((this.state.prog || 0) * 100)).padStart(2, '0') + '%', progH: 'calc((100% - 40px) * ' + (this.state.prog || 0).toFixed(3) + ')',
       dots, goNext: () => this.goTo(nextId || 'home'), nextLabel: nextId ? LABEL[nextId] : 'Back to top', nextAria: nextId ? 'Next section: ' + LABEL[nextId] : 'Back to top', chevRot: nextId ? '0deg' : '180deg',
       nav, onScroll: (e) => this.spy(e.currentTarget),
       gradMsg: this.GRAD[this.gi],

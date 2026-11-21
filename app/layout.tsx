@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Transitions from "./transitions";
 
-const title = "Amaan Ali · Software Developer";
+const title = "Amaan Ali · CS Portfolio";
 const description =
   "Fourth-year Computer Science student at Wilfrid Laurier University. I build and test end-to-end applications. Open to technical internships and full-time roles.";
 
