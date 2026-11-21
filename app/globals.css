@@ -48,3 +48,9 @@ a.pcard.just-returned { animation: just-returned 1.6s cubic-bezier(.2, .8, .2, 1
 /* Coming back to a saved spot on the home page: show everything immediately instead of
    relying on the scroll-linked fade-in, which some browsers don't update after a jump. */
 #home.returned .pg > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+
+/* Case studies in light mode: no dark flash before the light version takes over */
+html.cs-light, html.cs-light body { background: #fff; }
+html.cs-light .cs-wrap:not(.cs-ready) { visibility: hidden; }
+html.cs-light .cs-wrap.cs-ready { animation: dc-enter 480ms cubic-bezier(.2, .8, .2, 1) both; }
+@media (prefers-reduced-motion: reduce) { html.cs-light .cs-wrap.cs-ready { animation: none; } }

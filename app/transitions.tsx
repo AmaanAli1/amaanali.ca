@@ -26,15 +26,24 @@ export default function Transitions() {
       }
     };
 
-    // On a case study, point the "back to projects" links at the theme the visitor came from
-    try {
-      const saved = JSON.parse(sessionStorage.getItem("home-return") || "null");
-      if (saved?.path && window.location.pathname.startsWith("/projects/")) {
+    // On a case study, point the "back to projects" links at the home page (and theme) the visitor came from.
+    // Runs again when the light version of a case study replaces the pre-rendered dark one.
+    const fixBackLinks = () => {
+      if (!window.location.pathname.startsWith("/projects/")) return;
+      try {
+        const saved = JSON.parse(sessionStorage.getItem("home-return") || "null");
+        const home = saved?.path
+          ? saved.path.replace(/\/?$/, "/")
+          : localStorage.getItem("theme") === "light"
+            ? "/light/"
+            : "/";
         document.querySelectorAll<HTMLAnchorElement>('a[href="/#projects"]').forEach((a) => {
-          a.setAttribute("href", saved.path.replace(/\/?$/, "/") + "#projects");
+          a.setAttribute("href", home + "#projects");
         });
-      }
-    } catch {}
+      } catch {}
+    };
+    fixBackLinks();
+    window.addEventListener("cs-render", fixBackLinks);
 
     const onPageSwap = (e: Event) => {
       const vt = (e as Event & { viewTransition?: unknown }).viewTransition;
@@ -44,6 +53,8 @@ export default function Transitions() {
 
     const onPageReveal = (e: Event) => {
       const vt = (e as Event & { viewTransition?: unknown }).viewTransition;
+      // light case studies swap in after load, so morph into the page as a whole instead of the stage
+      if (document.documentElement.classList.contains("cs-light")) return;
       const stage = document.querySelector<HTMLElement>(".stage");
       if (vt && stage) stage.style.viewTransitionName = "project-hero";
     };
@@ -109,6 +120,7 @@ export default function Transitions() {
     window.addEventListener("pageshow", onPageShow);
     return () => {
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("cs-render", fixBackLinks);
       window.removeEventListener("resize", fit);
       fitLater.forEach(clearTimeout);
       window.removeEventListener("error", onError);

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import GymFlowCaseStudy from "@/components/GymFlowCaseStudy";
+import { GymFlowPage } from "../case-study";
 
 export const metadata: Metadata = {
   title: "GymFlow case study",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <GymFlowCaseStudy />;
+  return <GymFlowPage />;
 }

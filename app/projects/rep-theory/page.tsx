@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import RepTheoryCaseStudy from "@/components/RepTheoryCaseStudy";
+import { RepTheoryPage } from "../case-study";
 
 export const metadata: Metadata = {
   title: "Rep Theory case study",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <RepTheoryCaseStudy />;
+  return <RepTheoryPage />;
 }

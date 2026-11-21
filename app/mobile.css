@@ -477,6 +477,22 @@
   #rcol .cardin {
     overflow-x: auto !important;
   }
+  /* the price stats ("$145.77/mo") need more room: two across, the third on its own row */
+  #rcol div[style*="repeat(3"]:has(span[style*="font-size:26px"]),
+  #rcol div[style*="repeat(3"]:has(span[style*="font-size: 26px"]) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  #rcol div[style*="repeat(3"]:has(span[style*="font-size:26px"]) > :last-child,
+  #rcol div[style*="repeat(3"]:has(span[style*="font-size: 26px"]) > :last-child {
+    grid-column: span 2;
+  }
+  /* stat numbers: fit three across on a phone */
+  #rcol .cardin span[style*="font-size:30px"],
+  #rcol .cardin span[style*="font-size: 30px"],
+  #rcol .cardin span[style*="font-size:26px"],
+  #rcol .cardin span[style*="font-size: 26px"] {
+    font-size: 22px !important;
+  }
   #rcol .cardin[style*="JetBrains"] {
     font-size: 12px !important;
   }

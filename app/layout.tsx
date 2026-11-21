@@ -23,6 +23,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <head>
+        {/* Case studies follow the home page's theme: set it before the first paint so there's no dark flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(location.pathname.indexOf('/projects/')===0&&localStorage.getItem('theme')==='light'){document.documentElement.classList.add('cs-light')}}catch(e){}",
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}

@@ -31,6 +31,9 @@ export default function HomeApp({ initial }: { initial: Theme }) {
 
   React.useEffect(() => {
     document.body.classList.toggle("light", theme === "light");
+    try {
+      localStorage.setItem("theme", theme); // case studies open in the same theme
+    } catch {}
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", BG[theme]);
   }, [theme]);
 
