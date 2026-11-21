@@ -176,3 +176,5 @@ export default function HomeLight() {
   }, [mounted]);
   return mounted ? <div className="dc-enter"><Logic /></div> : <div style={{ height: '100vh', background: '#F5F5F7' }} />;
 }
+
+export { Logic };

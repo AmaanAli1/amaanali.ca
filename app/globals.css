@@ -38,3 +38,9 @@ a.pcard.just-returned { animation: just-returned 1.6s cubic-bezier(.2, .8, .2, 1
   100% { box-shadow: 0 0 0 0 rgba(227, 192, 141, 0); }
 }
 @media (prefers-reduced-motion: reduce) { a.pcard.just-returned { animation: none; } }
+
+/* Dark ⇄ Light: a soft cross-fade, no reload (triggered in home-app.tsx) */
+.theme-vt::view-transition-old(root) { animation: theme-out 520ms cubic-bezier(.4, 0, .2, 1) both; }
+.theme-vt::view-transition-new(root) { animation: theme-in 520ms cubic-bezier(.4, 0, .2, 1) both; mix-blend-mode: normal; }
+@keyframes theme-out { to { opacity: 0; } }
+@keyframes theme-in { from { opacity: 0; } }

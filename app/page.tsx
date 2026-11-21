@@ -1,5 +1,5 @@
-import HomeDark from "@/components/HomeDark";
+import HomeApp from "./home-app";
 
 export default function Page() {
-  return <HomeDark />;
+  return <HomeApp initial="dark" />;
 }

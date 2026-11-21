@@ -191,6 +191,7 @@ export default function NAME() {
 }
 """
     tail = (WRAP_GATE.replace('GATE', gate) if gate else WRAP).replace('NAME', name)
+    if gate: tail += '\nexport { Logic };\n'
     out=('// @ts-nocheck\n// Generated from the design canvas (' + path.split('/')[-1] + ') by tools/dc2tsx.py. Edit the design, then regenerate.\n'
          "'use client';\nimport React from 'react';\n\nconst CSS = " + json.dumps(css) + ';\n\n' + logic.replace('__JSX__',jsx) + tail)
     return out
