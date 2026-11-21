@@ -14,7 +14,27 @@ export default function Transitions() {
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement | null)?.closest?.("a.pcard") as HTMLAnchorElement | null;
       clicked = a?.getAttribute("href")?.startsWith("/projects/") ? a : null;
+      // remember exactly where the visitor was, so "back to projects" returns them there
+      const home = document.getElementById("home");
+      if (clicked && home) {
+        try {
+          sessionStorage.setItem(
+            "home-return",
+            JSON.stringify({ path: window.location.pathname, scroll: home.scrollTop, card: clicked.getAttribute("href"), at: Date.now() }),
+          );
+        } catch {}
+      }
     };
+
+    // On a case study, point the "back to projects" links at the theme the visitor came from
+    try {
+      const saved = JSON.parse(sessionStorage.getItem("home-return") || "null");
+      if (saved?.path && window.location.pathname.startsWith("/projects/")) {
+        document.querySelectorAll<HTMLAnchorElement>('a[href="/#projects"]').forEach((a) => {
+          a.setAttribute("href", saved.path.replace(/\/?$/, "/") + "#projects");
+        });
+      }
+    } catch {}
 
     const onPageSwap = (e: Event) => {
       const vt = (e as Event & { viewTransition?: unknown }).viewTransition;

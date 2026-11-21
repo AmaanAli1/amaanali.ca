@@ -131,16 +131,34 @@ class Logic extends React.Component<any, any> {
 export default function HomeLight() {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
-  // the page scrolls inside #home, so /#section links are handled here
+  // The page scrolls inside #home, so the browser can't restore the position by itself.
+  // Coming back from a case study puts you exactly where you left (saved in transitions.tsx);
+  // plain /#section links jump to that section.
   React.useEffect(() => {
     if (!mounted) return;
-    const id = decodeURIComponent(window.location.hash.slice(1));
-    if (!id) return;
     const t = setTimeout(() => {
       const c = document.getElementById('home');
-      const el = document.getElementById(id);
-      if (c && el) c.scrollTop = el.offsetTop;
-    }, 60);
+      if (!c) return;
+      let saved: { path: string; scroll: number; card: string; at: number } | null = null;
+      try { saved = JSON.parse(sessionStorage.getItem('home-return') || 'null'); } catch {}
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+      const returning = saved && saved.path === window.location.pathname && Date.now() - saved.at < 30 * 60 * 1000 &&
+        (window.location.hash === '#projects' || nav?.type === 'back_forward');
+      const prev = c.style.scrollSnapType;
+      c.style.scrollSnapType = 'none';
+      if (returning && saved) {
+        c.scrollTop = saved.scroll;
+        const card = document.querySelector<HTMLElement>('a.pcard[href="' + saved.card + '"]');
+        if (card) { card.classList.add('just-returned'); setTimeout(() => card.classList.remove('just-returned'), 1600); }
+        sessionStorage.removeItem('home-return');
+      } else {
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        const el = id ? document.getElementById(id) : null;
+        if (el) c.scrollTop = el.offsetTop;
+      }
+      requestAnimationFrame(() => { c.style.scrollSnapType = prev; c.dispatchEvent(new Event('scroll')); });
+      if (window.location.hash) history.replaceState(null, '', window.location.pathname);
+    }, 40);
     return () => clearTimeout(t);
   }, [mounted]);
   return mounted ? <div className="dc-enter"><Logic /></div> : <div style={{ height: '100vh', background: '#F5F5F7' }} />;

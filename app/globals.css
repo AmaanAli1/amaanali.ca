@@ -30,3 +30,11 @@ body.light { background: #F5F5F7; }
   @view-transition { navigation: none; }
   .dc-enter { animation: none; }
 }
+
+/* the project card you came back to glows briefly */
+a.pcard.just-returned { animation: just-returned 1.6s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes just-returned {
+  0%, 35% { box-shadow: 0 0 0 2px rgba(227, 192, 141, .55), 0 30px 60px -28px rgba(227, 192, 141, .35); }
+  100% { box-shadow: 0 0 0 0 rgba(227, 192, 141, 0); }
+}
+@media (prefers-reduced-motion: reduce) { a.pcard.just-returned { animation: none; } }
