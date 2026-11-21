@@ -4,6 +4,7 @@ import React from "react";
 import { flushSync } from "react-dom";
 import { Logic as DarkPage } from "@/components/HomeDark";
 import { Logic as LightPage } from "@/components/HomeLight";
+import VisitorToast from "./visitor-toast";
 
 type Theme = "dark" | "light";
 const PATH: Record<Theme, string> = { dark: "/", light: "/light" };
@@ -143,6 +144,7 @@ export default function HomeApp({ initial }: { initial: Theme }) {
     <>
       <div className="dc-enter">{theme === "dark" ? <DarkPage /> : <LightPage />}</div>
       <MobileMenuButton />
+      <VisitorToast theme={theme} />
     </>
   );
 }
