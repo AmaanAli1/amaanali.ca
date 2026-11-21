@@ -1,0 +1,4 @@
+html, body { margin: 0; padding: 0; height: 100%; }
+body { background: #101010; -webkit-font-smoothing: antialiased; }
+body.light { background: #F5F5F7; }
+*, *::before, *::after { box-sizing: border-box; }
