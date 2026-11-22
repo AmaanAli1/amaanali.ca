@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./mobile.css";
-import "./visitor-toast.css";
 import Transitions from "./transitions";
 
 const title = "Amaan Ali · CS Portfolio";
