@@ -5,6 +5,8 @@ import GymFlowDark from "@/components/GymFlowCaseStudy";
 import GymFlowLight from "@/components/GymFlowCaseStudyLight";
 import RepTheoryDark from "@/components/RepTheoryCaseStudy";
 import RepTheoryLight from "@/components/RepTheoryCaseStudyLight";
+import RecallDark from "@/components/RecallCaseStudy";
+import RecallLight from "@/components/RecallCaseStudyLight";
 
 /** The theme the visitor last used on the home page (saved by home-app.tsx). */
 function useLightTheme() {
@@ -35,4 +37,8 @@ export function GymFlowPage() {
 
 export function RepTheoryPage() {
   return <CaseStudy Dark={RepTheoryDark} Light={RepTheoryLight} />;
+}
+
+export function RecallPage() {
+  return <CaseStudy Dark={RecallDark} Light={RecallLight} />;
 }
